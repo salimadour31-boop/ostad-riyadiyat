@@ -168,7 +168,7 @@
   // Répartit les séquences sur les semaines selon les heures (h/semaine), avec semaines d'évaluation.
   function planYear(seqs, cal, weekly = 5, opts = {}) {
     const weeks = schoolWeeks(cal); const reserve = opts.reserve ?? true;
-    const plan = weeks.map(w => ({ ...w, items: [], hours: Math.round(weekly * w.open / 5) }));
+    const plan = weeks.map(w => ({ ...w, items: [], hours: Math.round(2 * weekly * w.open / 5) / 2 }));
     if (reserve) { // 1re semaine : évaluation diagnostique ; avant chaque fin de trimestre : اختبار
       plan[0].items.push({ kind: 'diag', ar: 'تقويم تشخيصي ومعالجة' }); plan[0].hours = Math.max(0, plan[0].hours - weekly);
       for (const t of [1, 2, 3]) { const tw = plan.filter(p => p.term === t); if (tw.length) { const last = tw[tw.length - 1]; last.items.push({ kind: 'exam', ar: `اختبار الفصل ${t}` }); last.hours = Math.max(0, last.hours - weekly); const mid = tw[Math.floor(tw.length / 2)]; mid.items.push({ kind: 'devoir', ar: `فرض الفصل ${t}` }); mid.hours = Math.max(0, mid.hours - 1); } }
