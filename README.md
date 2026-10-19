@@ -23,6 +23,16 @@
 - **الكراس اليومي** للحصص المنجزة.
 - **الخصوصية**: لا حساب ولا خادم؛ كل البيانات في متصفحك (IndexedDB)، مع نسخ احتياطي واسترجاع بصيغة JSON.
 
+### الجديد في الإصدار 2
+- **بنك كامل**: لكل درس من الدروس الـ172 (من 1م إلى 4م) قاعدة و6 تمارين أصلية على 3 مستويات بحل مفصل وسلم تنقيط، مع زر «تمارين أخرى» لأرقام وسياقات جديدة.
+- وضعية انطلاقية ووضعية إدماجية لكل مقطع، و6 وضعيات من نوع شهادة التعليم المتوسط.
+- **أداة الأشكال**: مثلث، مثلث قائم، طالس، دائرة، معلم، تمثيل دالة، مخطط بالأعمدة ودائري – تُدرج في الفروض والمذكرات والطباعة.
+- **تصدير Word بمعادلات حقيقية** (محرر معادلات Word) مع الأشكال، للمذكرات والفروض والتصحيح.
+- مذكرات مملوءة تلقائيا (تهيئة، نشاط، حوصلة، تقويم، واجب)، تقويم تشخيصي، بطاقة معالجة، فرض جاهز للمقطع.
+- التدرج يخصم العطل والأعياد الوطنية والدينية (قابلة للتعديل) وأسابيع الاختبارات، مع التوزيع الفصلي والسنوي للطباعة بخانات التأشير.
+- كشوف فردية ومحضر مجلس القسم (المعدل، الوسيط، الانحراف المعياري، التوزيع، المتفوقون، المعنيون بالمعالجة).
+- تذكير بالنسخ الاحتياطي، تصدير كل النقاط، نافذة ترحيب بالعربية، تحسينات الوصول (لوحة المفاتيح، قارئ الشاشة).
+
 ### تنبيه
 تقسيم المقاطع معاد بناؤه من تدرجات منشورة لموسم 2025-2026 (انظر `docs/recherche.md`). قارنه دائما بالتدرج الذي يعتمده مفتشك. التمارين كلها أصلية ولا تنقل من الكتاب المدرسي.
 
@@ -42,12 +52,23 @@ PWA installable, **hors ligne**, en arabe (RTL) avec interface française.
 - **Cahier de textes**.
 - **Données locales uniquement** (IndexedDB), sauvegarde/restauration JSON. Aucun compte, aucun serveur, aucune donnée envoyée.
 
+### Nouveautés v2
+- **Banque complète** : pour chacune des 172 leçons (1AM→4AM), une règle et 6 exercices originaux sur 3 niveaux, solution détaillée et barème ; bouton « Autres exercices » (variantes illimitées).
+- Une situation de départ et une situation d'intégration par séquence, 6 problèmes type BEM.
+- **Outil figures** (triangle, triangle rectangle, Thalès, cercle, repère, graphe de fonction, diagrammes) inséré dans devoirs, fiches et impressions.
+- **Export Word avec de vraies équations** (OMML, éditeur d'équations Word) et figures.
+- Fiches préremplies, test diagnostique, fiche de remédiation, devoir prêt par séquence.
+- Planning déduisant fériés nationaux et religieux (modifiables) et semaines d'examens ; répartitions trimestrielles et annuelle imprimables avec visas.
+- Bulletins individuels et PV du conseil de classe (moyenne, médiane, écart-type, répartition).
+- Rappel de sauvegarde, export de toutes les notes, accueil en arabe, accessibilité.
+
 ### Développement
 Aucun build : HTML/CSS/JS statiques. Bibliothèques incluses localement : [KaTeX](https://katex.org) (MIT) et [docx](https://github.com/dolanmiu/docx) (MIT).
 
 ```bash
 npm run serve          # http://localhost:8765
-npm test               # tests de logique (Node)
+npm run build          # régénère js/lessons.js depuis src/ (générateurs)
+npm test               # logique + vérification de toute la banque (Node)
 npm i && npm run test:e2e   # tests Chrome headless (desktop + mobile, hors ligne, impression, installabilité)
 ```
 
