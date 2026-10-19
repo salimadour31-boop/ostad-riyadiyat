@@ -8,7 +8,7 @@
   const L = () => I18N.lang, fr = () => L() === 'fr';
   const nm = o => (fr() && o.fr) ? o.fr : o.ar;
   const view = $('#view');
-  const S = { settings: { lang: 'ar', teacher: '', school: '', wilaya: '', schoolYear: '2026-2027', formula: '2-3', termCoefs: [1, 1, 1] }, classes: [], fiches: [], tests: [], journal: [], plans: {}, draft: null, curClass: null, curTerm: 1 };
+  const S = { settings: { lang: 'ar', teacher: '', school: '', wilaya: '', schoolYear: '2026-2027', formula: '1-2', termCoefs: [1, 1, 1] }, classes: [], fiches: [], tests: [], journal: [], plans: {}, draft: null, curClass: null, curTerm: 1 };
   const KEYS = ['settings', 'classes', 'fiches', 'tests', 'journal', 'plans', 'draft'];
   const timers = {};
   function save(k) { clearTimeout(timers[k]); timers[k] = setTimeout(() => DB.set(k, S[k]).catch(e => console.warn(e)), 250); }

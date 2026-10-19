@@ -18,7 +18,9 @@ ok('moyenne annuelle avec coefficients', () => { assert.strictEqual(C.annualAver
 ok('moyenne pondérée (coefficients de matières)', () => assert.strictEqual(C.weightedAverage([{ value: 12, coef: 4 }, { value: 8, coef: 5 }, { value: 'x', coef: 2 }]), C.round((48 + 40) / 9, 2)));
 ok('rangs ex-aequo', () => assert.deepStrictEqual(C.ranks([12, 15, 12, null, 9]), [2, 1, 2, null, 4]));
 ok('appréciations', () => { assert.strictEqual(C.appreciation(18.5), 'ممتاز'); assert.strictEqual(C.appreciation(10), 'مقبول'); assert.strictEqual(C.appreciation(3, undefined, 'fr'), 'Faible'); assert.strictEqual(C.appreciation(''), ''); });
-ok('statistiques de classe', () => assert.deepStrictEqual(C.stats([8, 12, 14, '', 6]), { n: 4, mean: 10, min: 6, max: 14, pass: 50 }));
+ok('statistiques de classe (conseil)', () => { const st = C.stats([8, 12, 14, '', 6]); assert.deepStrictEqual([st.n, st.mean, st.min, st.max, st.pass, st.median, st.sd], [4, 10, 6, 14, 50, 10, 3.16]); assert.strictEqual(st.bands.reduce((a, b) => a + b.n, 0), 4); });
+ok('formule par défaut = ((فرض+تقويم)/2 + 2×اختبار)/3', () => assert.strictEqual(C.termAverage({ eval: 15, devoir: 12, exam: 9 }), 10.5));
+ok('jours fériés et examens déduits du planning', () => { const c = C.defaultCalendar(2026); const w = C.schoolWeeks(c); const wk = d => w.find(x => x.start <= d && d < C.iso(new Date(new Date(x.start).getTime() + 7 * 864e5))); assert.ok(wk('2027-01-12').open <= 4, 'Yennayer'); const e = wk('2027-05-16'); assert.ok(!e || e.open <= 2, 'Aïd el-Adha'); c.exams = [{ ar: 'x', from: '2027-02-07', to: '2027-02-11' }]; assert.ok(!C.schoolWeeks(c).some(x => x.start === '2027-02-07'), 'semaine examen'); });
 ok('générateurs : déterministes et corrects (500 tirages chacun)', () => {
   for (const [k, g] of Object.entries(C.GEN)) {
     assert.deepStrictEqual(C.generate(k, 9, 3), C.generate(k, 9, 3));

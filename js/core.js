@@ -95,16 +95,17 @@
 
   // ---------- moyennes ----------
   const FORMULAS = {
-    '2-3': { ar: '(2 × معدل المراقبة المستمرة + 3 × الاختبار) ÷ 5', fr: '(2×CC + 3×Examen)/5', cc: 2, ex: 3 },
-    '1-2': { ar: '(معدل المراقبة المستمرة + 2 × الاختبار) ÷ 3', fr: '(CC + 2×Examen)/3', cc: 1, ex: 2 }
+    // Défaut (sources 2024-2026) : ((فرض + تقويم مستمر)/2 + 2×اختبار)/3. L'ancienne (2×CC + 3×E)/5 reste disponible.
+    '1-2': { ar: '((الفرض + التقويم المستمر) ÷ 2 + 2 × الاختبار) ÷ 3', fr: '((Devoir + Éval. continue)/2 + 2×Examen)/3', cc: 1, ex: 2 },
+    '2-3': { ar: '(2 × معدل المراقبة المستمرة + 3 × الاختبار) ÷ 5 (صيغة قديمة)', fr: '(2×CC + 3×Examen)/5 (ancienne)', cc: 2, ex: 3 }
   };
   const isNum = v => v !== '' && v !== null && v !== undefined && !isNaN(v);
   function ccAverage(evals, devoirs) { // évaluation continue + فرض(s)
     const parts = [evals, ...[].concat(devoirs)].filter(isNum).map(Number);
     return parts.length ? round(parts.reduce((a, b) => a + b, 0) / parts.length, 2) : null;
   }
-  function termAverage(g, formula = '2-3') {
-    const f = FORMULAS[formula] || FORMULAS['2-3'];
+  function termAverage(g, formula = '1-2') {
+    const f = FORMULAS[formula] || FORMULAS['1-2'];
     const cc = ccAverage(g.eval, g.devoir);
     const ex = isNum(g.exam) ? Number(g.exam) : null;
     if (cc === null && ex === null) return null;
@@ -119,7 +120,9 @@
   const APPRECIATIONS = [[18, 'ممتاز', 'Excellent'], [16, 'جيد جدا', 'Très bien'], [14, 'جيد', 'Bien'], [12, 'قريب من الجيد', 'Assez bien'], [10, 'مقبول', 'Passable'], [8, 'متوسط، عليه بذل المزيد', 'Insuffisant'], [0, 'ضعيف، يحتاج إلى معالجة', 'Faible']];
   function appreciation(avg, table = APPRECIATIONS, lang = 'ar') { if (!isNum(avg)) return ''; const row = table.find(t => avg >= t[0]) || table[table.length - 1]; return lang === 'fr' ? row[2] : row[1]; }
   function ranks(values) { const s = values.map((v, i) => [v, i]).filter(x => isNum(x[0])).sort((a, b) => b[0] - a[0]); const out = values.map(() => null); s.forEach(([v, i], k) => { out[i] = k > 0 && s[k - 1][0] === v ? out[s[k - 1][1]] : k + 1; }); return out; }
-  function stats(values) { const v = values.filter(isNum).map(Number); if (!v.length) return null; const m = v.reduce((a, b) => a + b, 0) / v.length; return { n: v.length, mean: round(m, 2), min: Math.min(...v), max: Math.max(...v), pass: round(100 * v.filter(x => x >= 10).length / v.length, 1) }; }
+  function stats(values) { const v = values.filter(isNum).map(Number); if (!v.length) return null; const m = v.reduce((a, b) => a + b, 0) / v.length; const sd = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length); const s = [...v].sort((a, b) => a - b), n = s.length; const med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+    const bands = [[0, 8], [8, 10], [10, 12], [12, 14], [14, 16], [16, 20.01]].map(([a, b]) => ({ from: a, to: Math.min(b, 20), n: v.filter(x => x >= a && x < b).length }));
+    return { n, mean: round(m, 2), sd: round(sd, 2), median: round(med, 2), min: Math.min(...v), max: Math.max(...v), pass: round(100 * v.filter(x => x >= 10).length / n, 1), bands }; }
 
   // ---------- calendrier ----------
   const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -134,12 +137,22 @@
         { ar: 'عطلة الشتاء', from: `${y}-12-18`, to: `${y + 1}-01-02` },
         { ar: 'عطلة الربيع', from: `${y + 1}-03-19`, to: `${y + 1}-04-03` }
       ],
-      dayOff: [{ ar: 'رأس السنة الأمازيغية', date: `${y + 1}-01-12` }, { ar: 'عيد العمال', date: `${y + 1}-05-01` }, { ar: 'عيد الثورة', date: `${y}-11-01` }],
+      // Jours fériés (journée à journée, déduits du planning). Dates religieuses = estimations (calendrier lunaire), à corriger selon l'annonce officielle.
+      dayOff: [
+        { ar: 'عيد الثورة', fr: 'Fête de la Révolution', date: `${y}-11-01` },
+        { ar: 'رأس السنة الأمازيغية (يناير)', fr: 'Yennayer', date: `${y + 1}-01-12` },
+        { ar: 'عيد الفطر (تقديري)', fr: 'Aïd el-Fitr (estimé)', date: `${y + 1}-03-09`, to: `${y + 1}-03-11`, religious: true },
+        { ar: 'عيد العمال', fr: 'Fête du Travail', date: `${y + 1}-05-01` },
+        { ar: 'عيد الأضحى (تقديري)', fr: 'Aïd el-Adha (estimé)', date: `${y + 1}-05-16`, to: `${y + 1}-05-18`, religious: true }
+      ],
+      // Semaines d'examens (déduites du temps d'enseignement). Vides par défaut : le planificateur réserve automatiquement la dernière semaine de chaque trimestre.
+      exams: [],
       terms: [`${y}-12-17`, `${y + 1}-03-18`] };
   }
   // Semaines scolaires (début = dimanche). Une semaine entièrement en vacances est sautée.
   function schoolWeeks(cal) {
-    const inHol = d => cal.holidays.some(h => iso(d) >= h.from && iso(d) <= h.to);
+    const inR = (d, a, b) => iso(d) >= a && iso(d) <= (b || a);
+    const inHol = d => cal.holidays.some(h => inR(d, h.from, h.to)) || (cal.dayOff || []).some(o => inR(d, o.date, o.to)) || (cal.exams || []).some(e => inR(d, e.from, e.to));
     let d = parse(cal.start); while (d.getDay() !== 0) d = addDays(d, -1);
     const end = parse(cal.end), weeks = [];
     while (d <= end) {
