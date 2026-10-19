@@ -70,3 +70,14 @@ summary{cursor:pointer;font-weight:600;padding:.3rem 0}
   .sheet{font-size:12pt}
   tr,.ex,.exblock{break-inside:avoid}
 }
+
+/* v2 */
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:#fff;padding:.5rem 1rem;z-index:100}
+.skip:focus{inset-inline-start:.5rem}
+.fig{margin:.5rem 0;text-align:center}.fig svg{max-width:100%;height:auto}
+.bp{color:#0f6b5c;font-size:.85em;white-space:nowrap}
+.modal{position:fixed;inset:0;background:rgba(16,24,40,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:1rem}
+.modal-box{background:#fff;border-radius:12px;max-width:620px;width:100%;padding:1.2rem 1.4rem;max-height:90vh;overflow:auto;line-height:1.8}
+:focus-visible{outline:3px solid #f79009;outline-offset:2px}
+@media print{.fig svg{max-width:60%}.exblock{break-inside:avoid}}
+@media print{.modal{display:none!important}}
