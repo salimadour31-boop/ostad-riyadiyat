@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تثبيت «أستاذ الرياضيات» – Installer Ostad Riyadiyat</title>
+<meta name="theme-color" content="#0f6b5c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/app.css">
+<style>
+ body{max-width:760px;margin:0 auto;padding:1rem;font-family:system-ui,"Segoe UI",Tahoma,sans-serif}
+ .qr{display:flex;justify-content:center;margin:1rem 0}.qr svg{width:min(80vw,340px);height:auto;background:#fff;padding:8px;border-radius:12px;box-shadow:0 2px 10px #0002}
+ .url{font-size:1.25rem;text-align:center;direction:ltr;word-break:break-all}
+ .plats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.6rem;margin:1rem 0}
+ .plats a,.plats button{display:block;text-align:center;padding:.9rem;font-size:1.05rem}
+ h1{text-align:center}.center{text-align:center}
+</style>
+</head>
+<body>
+<h1><img src="icons/icon-192.png" alt="" width="48" height="48" style="vertical-align:middle"> أستاذ الرياضيات · Ostad Riyadiyat</h1>
+<p class="center">امسح الرمز بكاميرا الهاتف لفتح التطبيق ثم ثبّته · Scannez le code avec l’appareil photo, puis installez.</p>
+<div class="qr" id="qr" role="img" aria-label="QR code: https://salimadour31-boop.github.io/ostad-riyadiyat/"></div>
+<p class="url"><a id="short" href="https://salimadour31-boop.github.io/ostad">salimadour31-boop.github.io/ostad</a></p>
+<p class="center"><span id="instSlot"></span> <a class="btn sec" href="./">فتح التطبيق · Ouvrir l’app</a></p>
+<h2>اختر جهازك · Choisissez votre appareil</h2>
+<div class="plats">
+ <button class="btn sec" data-p="android" type="button">📱 Android – Chrome</button>
+ <button class="btn sec" data-p="samsung" type="button">📱 Samsung Internet</button>
+ <button class="btn sec" data-p="ios" type="button">🍏 iPhone / iPad – Safari</button>
+ <button class="btn sec" data-p="windows" type="button">💻 Windows – Chrome</button>
+ <button class="btn sec" data-p="edge" type="button">💻 Windows – Edge</button>
+ <a class="btn sec" id="apk" href="https://github.com/salimadour31-boop/ostad-riyadiyat/releases/latest">⬇ APK Android + اختصار Windows</a>
+</div>
+<div id="steps" class="card" aria-live="polite"></div>
+<p class="muted center">مجاني ومفتوح المصدر (MIT) – البيانات تبقى على جهازك · Libre (MIT) – vos données restent sur votre appareil.</p>
+<script src="vendor/qrcode/qrcode.js"></script>
+<script src="js/install.js"></script>
+<script>
+(function () {
+  var APP = INSTALL.APP_URL;
+  var q = qrcode(0, 'M'); q.addData(APP); q.make();
+  document.getElementById('qr').innerHTML = q.createSvgTag({ cellSize: 8, margin: 4, scalable: true });
+  var d = INSTALL.detect();
+  var b = INSTALL.button('btn'); document.getElementById('instSlot').appendChild(b);
+  function show(p) {
+    var S = INSTALL.STEPS[p]; var h = '<h3>' + p + '</h3><ol>' + S.ar.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol><ol dir="ltr" lang="fr">' + S.fr.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol>';
+    if (p === 'android' || p === 'inapp') h += '<p><a class="btn" href="' + INSTALL.intentLink() + '">افتح في Chrome · Ouvrir dans Chrome</a></p>';
+    document.getElementById('steps').innerHTML = h;
+  }
+  [].forEach.call(document.querySelectorAll('[data-p]'), function (el) { el.onclick = function () { show(el.dataset.p); }; });
+  show(d.platform === 'desktop' ? 'windows' : d.platform);
+  window.__QR = q;
+})();
+</script>
+</body>
+</html>

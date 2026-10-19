@@ -81,3 +81,4 @@ summary{cursor:pointer;font-weight:600;padding:.3rem 0}
 :focus-visible{outline:3px solid #f79009;outline-offset:2px}
 @media print{.fig svg{max-width:60%}.exblock{break-inside:avoid}}
 @media print{.modal{display:none!important}}
+.install-btn{font-weight:700}.top .install-btn{background:#fff;color:#0f6b5c;margin-inline-end:.4rem}

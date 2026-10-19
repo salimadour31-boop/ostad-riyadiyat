@@ -7,3 +7,10 @@ Thumbs.db
 *.png
 !icons/*.png
 .env
+*.jks
+*.keystore
+*.apk
+*.aab
+*.idsig
+android/app/
+android/.gradle/

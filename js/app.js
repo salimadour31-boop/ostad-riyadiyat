@@ -28,7 +28,7 @@
   // ---------------- routes ----------------
   const ROUTES = ['home', 'prog', 'fiche', 'plan', 'bank', 'figs', 'test', 'grades', 'journal', 'settings'];
   function nav() { const cur = (location.hash.slice(1) || 'home').split('/')[0]; $('#nav').innerHTML = ROUTES.map(r => `<a href="#${r}" class="${r === cur ? 'on' : ''}"${r === cur ? ' aria-current="page"' : ''}>${r === 'figs' ? tx('الأشكال', 'Figures') : t(r)}</a>`).join(''); }
-  function route() { const [r, arg] = (location.hash.slice(1) || 'home').split('/'); nav(); (V[r] || V.home)(arg); math(view); $$('[data-t]').forEach(e => e.textContent = t(e.dataset.t)); $('#langBtn').textContent = fr() ? 'العربية' : 'Français'; document.title = t('appName') + ' – ' + (r === 'figs' ? tx('الأشكال', 'Figures') : t(r in V ? r : 'home')); }
+  function route() { const [r, arg] = (location.hash.slice(1) || 'home').split('/'); nav(); (V[r] || V.home)(arg); math(view); $$('[data-t]').forEach(e => e.textContent = t(e.dataset.t)); $('#langBtn').textContent = fr() ? 'العربية' : 'Français'; const slot = $('#installSlot'); slot.innerHTML = ''; slot.appendChild(INSTALL.button('btn ghost')); document.title = t('appName') + ' – ' + (r === 'figs' ? tx('الأشكال', 'Figures') : t(r in V ? r : 'home')); }
   function backupNag() { const st = S.settings, has = S.classes.length || S.fiches.length || S.tests.length || S.journal.length; if (!has) return ''; const days = st.lastBackup ? Math.floor((Date.now() - new Date(st.lastBackup)) / 864e5) : null;
     if (days !== null && days < 14) return ''; return `<p class="warn" role="alert">${tx(days === null ? 'لم تحفظ نسخة احتياطية من بياناتك بعد.' : `آخر نسخة احتياطية منذ ${days} يوما.`, days === null ? 'Aucune sauvegarde de vos données pour l’instant.' : `Dernière sauvegarde il y a ${days} jours.`)} <a class="btn sm" href="#settings">${t('backup')}</a></p>`; }
   const V = {};
@@ -39,7 +39,7 @@
       ${backupNag()}
       <p class="muted" style="margin-top:1rem">${t('privacy')}</p>
       <button id="installBtn" class="btn sec" hidden>${t('install')}</button>`;
-    if (deferredPrompt) { const b = $('#installBtn'); b.hidden = false; b.onclick = () => { deferredPrompt.prompt(); deferredPrompt = null; b.hidden = true; }; }
+    { const b = $('#installBtn'); if (!INSTALL.detect().standalone) { b.hidden = false; b.className = 'btn install-btn'; b.onclick = INSTALL.click; } }
   };
 
   // ---------------- programme ----------------
@@ -419,12 +419,10 @@
       <li><b>الفروض والاختبارات</b>: فرض جاهز، تقويم تشخيصي، بطاقة معالجة، ونمط شهادة التعليم المتوسط مع التصحيح.</li>
       <li><b>دفتر التنقيط</b>: استيراد القائمة، حساب المعدلات، كشوف فردية ومحضر مجلس القسم.</li>
       <li>كل البيانات على جهازك فقط ويعمل التطبيق دون أنترنت. <b>احفظ نسخة احتياطية بانتظام.</b></li></ol>
-      <p class="muted">Interface disponible en français : bouton « Français » en haut.</p><div class="bar"><button class="btn" id="obOk">فهمت، لنبدأ</button><a class="btn sec" href="#settings" id="obSet">الإعدادات</a></div></div>`;
-    document.body.appendChild(d); const close = () => { d.remove(); S.settings.onboarded = true; save('settings'); view.focus(); }; $('#obOk', d).onclick = close; $('#obSet', d).onclick = close; d.addEventListener('keydown', e => { if (e.key === 'Escape') close(); }); $('#obOk', d).focus(); }
+      <p class="muted">Interface disponible en français : bouton « Français » en haut.</p><div class="bar"><button class="btn" id="obOk">فهمت، لنبدأ</button><span id="obInst"></span><a class="btn sec" href="#settings" id="obSet">الإعدادات</a></div></div>`;
+    document.body.appendChild(d); if (!INSTALL.detect().standalone) $('#obInst', d).appendChild(INSTALL.button('btn sec')); const close = () => { d.remove(); S.settings.onboarded = true; save('settings'); view.focus(); }; $('#obOk', d).onclick = close; $('#obSet', d).onclick = close; d.addEventListener('keydown', e => { if (e.key === 'Escape') close(); }); $('#obOk', d).focus(); }
 
   // ---------------- démarrage ----------------
-  let deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; const b = $('#installBtn'); if (b) { b.hidden = false; b.onclick = () => { deferredPrompt.prompt(); deferredPrompt = null; b.hidden = true; }; } });
   $('#langBtn').onclick = () => { S.settings.lang = fr() ? 'ar' : 'fr'; I18N.set(S.settings.lang); save('settings'); route(); };
   window.addEventListener('hashchange', () => { route(); view.focus({ preventScroll: true }); window.scrollTo(0, 0); });
   window.addEventListener('afterprint', () => { $('#printArea').innerHTML = ''; });

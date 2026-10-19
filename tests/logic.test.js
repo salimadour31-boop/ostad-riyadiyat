@@ -41,4 +41,16 @@ ok('progression : chaque séquence placée, heures conservées', () => { for (co
 ok('CSV : import élèves (; , guillemets, BOM, en-tête)', () => { const s = C.studentsFromCSV('\uFEFFاللقب;الاسم\nبن علي;محمد\n"Saïdi; A";Amina\n\n'); assert.deepStrictEqual(s.map(x => x.last), ['بن علي', 'Saïdi; A']); assert.strictEqual(C.studentsFromCSV('a,b\nc,d').length, 2); const out = C.toCSV([['x;y', 'q"']]); assert.ok(out.includes('"x;y"') && out.includes('"q"""')); });
 ok('programme : 4 niveaux, 3 domaines, séquences et ressources', () => { assert.deepStrictEqual(P.YEARS.map(y => y.id), ['1AM', '2AM', '3AM', '4AM']); for (const y of P.YEARS) { assert.ok(y.seqs.length >= 7); assert.deepStrictEqual(new Set(y.seqs.map(s => s.domain)), new Set(['num', 'geo', 'fn'])); y.seqs.forEach(s => assert.ok(s.lessons.length >= 3 && s.hours > 0 && s.competence)); } });
 ok('banque : chaque séquence a des exercices, solutions présentes, $ équilibrés', () => { for (const y of P.YEARS) for (const s of y.seqs) assert.ok(B.some(e => e.seq === s.id), s.id); B.forEach(e => { assert.ok(e.q && e.a && [1, 2, 3].includes(e.level)); assert.strictEqual((e.q.match(/\$/g) || []).length % 2, 0, e.id); assert.strictEqual((e.a.match(/\$/g) || []).length % 2, 0, e.id); }); assert.strictEqual(new Set(B.map(e => e.id)).size, B.length); });
+{ const I = require('../js/install.js'); const nav = { maxTouchPoints: 0 };
+  ok('installation : détection des plateformes', () => { const D = ua => I.detect(ua, nav).platform;
+    assert.strictEqual(D('Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 Chrome/129 Mobile Safari/537.36'), 'android');
+    assert.strictEqual(D('Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 SamsungBrowser/25.0 Chrome/121 Mobile'), 'samsung');
+    assert.strictEqual(D('Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Version/17.5 Mobile/15E148 Safari/604.1'), 'ios');
+    assert.strictEqual(D('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/129 Safari/537.36 Edg/129.0'), 'edge');
+    assert.strictEqual(D('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/129 Safari/537.36'), 'windows');
+    assert.strictEqual(D('Mozilla/5.0 (Linux; Android 14; wv) AppleWebKit/537.36 Chrome/129 Mobile Safari/537.36 [FBAN/EMA;FBAV/400.0]'), 'inapp');
+    assert.strictEqual(D('Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) Instagram 300.0'), 'inapp');
+    assert.ok(I.intentLink().startsWith('intent://salimadour31-boop.github.io/ostad-riyadiyat/#Intent;scheme=https;package=com.android.chrome;'));
+    for (const p of ['android', 'samsung', 'ios', 'windows', 'edge', 'inapp']) assert.ok(I.STEPS[p].ar.length && I.STEPS[p].fr.length, p); }); }
+
 console.log(`\n${n} tests OK`);

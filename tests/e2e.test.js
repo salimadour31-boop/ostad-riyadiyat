@@ -13,6 +13,17 @@ const assert = require('assert');
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); }); page.on('pageerror', e => errors.push(e.message));
     await page.goto(URL0, { waitUntil: 'networkidle' });
     await ok('accueil arabe (onboarding) puis fermeture', async () => { await page.waitForSelector('.modal [role=dialog], .modal', { timeout: 3000 }); assert.ok((await page.textContent('.modal')).includes('مرحبا')); await page.keyboard.press('Escape'); await page.waitForTimeout(100); assert.strictEqual(await page.locator('.modal').count(), 0); });
+    await ok('installation : bouton en-tête, aide par plateforme, beforeinstallprompt', async () => {
+      assert.ok(await page.isVisible('header .install-btn')); await page.click('header .install-btn'); await page.waitForSelector('#installHelp');
+      const h = await page.textContent('#installHelp'); assert.ok(h.includes('تثبيت') && h.includes('Safari') && h.includes('Samsung')); await page.keyboard.press('Escape');
+      const r = await page.evaluate(async () => { let called = 0; const e = new Event('beforeinstallprompt', { cancelable: true }); e.prompt = () => { called++; }; e.userChoice = Promise.resolve({ outcome: 'accepted' }); window.dispatchEvent(e); const av = INSTALL.available; document.querySelector('header .install-btn').click(); await new Promise(r => setTimeout(r, 50)); return { av, called, prevented: e.defaultPrevented, help: !!document.getElementById('installHelp') }; });
+      assert.deepStrictEqual(r, { av: true, called: 1, prevented: true, help: false }); });
+    await ok('page installer.html : QR local décodé, boutons par plateforme', async () => {
+      const p2 = await ctx.newPage(); const errs = []; p2.on('pageerror', e => errs.push(e.message)); p2.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); await p2.goto(URL0 + 'installer.html', { waitUntil: 'networkidle' });
+      assert.strictEqual(await p2.locator('[data-p]').count(), 5); await p2.click('[data-p=ios]'); assert.ok((await p2.textContent('#steps')).includes('Safari'));
+      await p2.locator('#qr svg').screenshot({ path: '/tmp/ostad-qr-' + label + '.png' });
+      const dec = require('child_process').execFileSync('zbarimg', ['-q', '--raw', '/tmp/ostad-qr-' + label + '.png']).toString().trim(); assert.strictEqual(dec, 'https://salimadour31-boop.github.io/ostad-riyadiyat/');
+      assert.ok((await p2.textContent('body')).includes('salimadour31-boop.github.io/ostad')); assert.deepStrictEqual(errs, []); await p2.close(); });
     await ok('accessibilité : lien d’évitement, aria-current, libellés', async () => { assert.strictEqual(await page.locator('a.skip').count(), 1); assert.strictEqual(await page.locator('#nav a[aria-current=page]').count(), 1);
       for (const r of ['fiche', 'test', 'grades']) { await page.goto(URL0 + '#' + r); await page.waitForTimeout(100); const bad = await page.evaluate(() => [...document.querySelectorAll('#view input:not([type=hidden]):not([type=file]), #view select, #view textarea')].filter(e => !e.closest('label') && !e.getAttribute('aria-label') && !e.placeholder).length); assert.strictEqual(bad, 0, r); } });
     await ok('RTL arabe par défaut', async () => { assert.strictEqual(await page.getAttribute('html', 'dir'), 'rtl'); assert.strictEqual(await page.getAttribute('html', 'lang'), 'ar'); });

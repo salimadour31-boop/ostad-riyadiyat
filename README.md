@@ -1,5 +1,7 @@
 # أستاذ الرياضيات · Ostad Riyadiyat
 
+**📲 تثبيت سريع / Installation rapide : [installer.html](https://salimadour31-boop.github.io/ostad-riyadiyat/installer.html)** (رمز QR، APK أندرويد، اختصار ويندوز · QR code, APK Android, raccourci Windows)
+
 **تطبيق ويب مجاني ومفتوح المصدر لأساتذة الرياضيات في التعليم المتوسط بالجزائر (1م – 4م).**
 **Application web libre et gratuite pour les professeurs de mathématiques du cycle moyen en Algérie (1AM – 4AM).**
 
