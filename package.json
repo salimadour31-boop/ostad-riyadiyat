@@ -1,0 +1,13 @@
+{
+  "name": "ostad-riyadiyat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PWA gratuite pour les professeurs de mathématiques du cycle moyen (Algérie)",
+  "license": "MIT",
+  "scripts": {
+    "test": "node tests/logic.test.js",
+    "test:e2e": "node tests/e2e.test.js",
+    "serve": "python3 -m http.server 8765"
+  },
+  "devDependencies": { "playwright": "^1.48.0" }
+}
