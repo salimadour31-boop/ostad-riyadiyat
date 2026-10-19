@@ -1,0 +1,53 @@
+/* Chaînes d'interface : arabe (principal) et français. */
+(function (root) {
+  const T = {
+    appName: ['أستاذ الرياضيات', 'Ostad Riyadiyat'],
+    footer: ['مجاني ومفتوح المصدر (MIT) – كل البيانات تبقى على جهازك فقط', 'Libre et gratuit (MIT) – toutes les données restent sur votre appareil'],
+    home: ['الرئيسية', 'Accueil'], prog: ['المنهاج', 'Programme'], fiche: ['المذكرة', 'Fiche'], plan: ['التدرج السنوي', 'Progression'],
+    bank: ['التمارين', 'Exercices'], test: ['الفروض والاختبارات', 'Devoirs & examens'], grades: ['دفتر التنقيط', 'Notes'],
+    journal: ['الكراس اليومي', 'Cahier de textes'], settings: ['الإعدادات والنسخ', 'Réglages & sauvegarde'],
+    homeIntro: ['أدوات بسيطة لتحضير الدروس والتقويم وفق منهاج الجيل الثاني للتعليم المتوسط. يعمل دون إنترنت بعد أول زيارة.', 'Outils simples pour préparer et évaluer selon le programme de 2e génération du cycle moyen. Fonctionne hors ligne après la première visite.'],
+    d_prog: ['السنوات، الميادين، المقاطع والموارد', 'Années, domaines, séquences, ressources'],
+    d_fiche: ['توليد مذكرة حصة قابلة للتعديل والطباعة وWord', 'Générer une fiche de séance (impression, Word)'],
+    d_plan: ['توزيع المقاطع على أسابيع السنة الدراسية', 'Répartir les séquences sur l’année'],
+    d_bank: ['تمارين أصلية بالحلول ومولدات تمارين عددية', 'Exercices originaux corrigés et générateurs'],
+    d_test: ['فرض، اختبار، أو موضوع على نمط شهادة التعليم المتوسط', 'Devoir, composition ou sujet type BEM'],
+    d_grades: ['الأقسام، التلاميذ، العلامات، المعدلات والملاحظات', 'Classes, élèves, notes, moyennes, appréciations'],
+    d_journal: ['تسجيل الحصص المنجزة', 'Journal des séances'],
+    d_settings: ['معلومات الأستاذ، نسخ احتياطي واسترجاع', 'Profil, sauvegarde et restauration'],
+    year: ['المستوى', 'Niveau'], domain: ['الميدان', 'Domaine'], seq: ['المقطع التعلمي', 'Séquence'], lesson: ['المورد المعرفي / الدرس', 'Ressource / leçon'],
+    hours: ['ساعة', 'h'], suggested: ['الحجم الساعي المقترح', 'Volume horaire suggéré'], competence: ['الكفاءة المستهدفة', 'Compétence visée'],
+    global: ['الكفاءة الشاملة', 'Compétence globale'], resources: ['الموارد', 'Ressources'], all: ['الكل', 'Tout'],
+    print: ['طباعة / PDF', 'Imprimer / PDF'], docx: ['تنزيل Word', 'Télécharger Word'], save: ['حفظ', 'Enregistrer'], del: ['حذف', 'Supprimer'],
+    open: ['فتح', 'Ouvrir'], add: ['إضافة', 'Ajouter'], saved: ['تم الحفظ', 'Enregistré'], new: ['جديد', 'Nouveau'],
+    level: ['المستوى', 'Niveau'], lv1: ['تطبيق مباشر', 'Application'], lv2: ['متوسط', 'Intermédiaire'], lv3: ['وضعية / إدماج', 'Situation / intégration'],
+    showSol: ['الحل', 'Solution'], generator: ['مولد التمارين', 'Générateur'], generate: ['توليد', 'Générer'], count: ['العدد', 'Nombre'],
+    addToTest: ['أضف إلى الموضوع', 'Ajouter au sujet'], added: ['أضيف إلى الموضوع', 'Ajouté au sujet'],
+    type: ['النوع', 'Type'], devoir: ['فرض', 'Devoir'], exam: ['اختبار فصلي', 'Composition'], bem: ['نموذج شهادة التعليم المتوسط', 'Sujet type BEM'],
+    term: ['الفصل', 'Trimestre'], duration: ['المدة', 'Durée'], points: ['النقاط', 'Points'], total: ['المجموع', 'Total'],
+    autoBareme: ['توزيع آلي للعلامات على 20', 'Barème automatique sur 20'], key: ['التصحيح النموذجي وسلم التنقيط', 'Corrigé et barème'],
+    classes: ['الأقسام', 'Classes'], className: ['اسم القسم', 'Nom de la classe'], students: ['التلاميذ', 'Élèves'], importCsv: ['استيراد CSV', 'Importer CSV'],
+    exportCsv: ['تصدير CSV', 'Exporter CSV'], last: ['اللقب', 'Nom'], first: ['الاسم', 'Prénom'], eval: ['التقويم المستمر', 'Évaluation continue'],
+    exam2: ['الاختبار', 'Composition'], avg: ['المعدل', 'Moyenne'], rank: ['الرتبة', 'Rang'], appr: ['الملاحظة', 'Appréciation'],
+    formula: ['طريقة حساب المعدل', 'Formule de moyenne'], annual: ['المعدل السنوي', 'Moyenne annuelle'], termCoefs: ['معاملات الفصول', 'Coefficients des trimestres'],
+    classStats: ['إحصاء القسم (لمجلس القسم)', 'Statistiques (conseil de classe)'], passRate: ['نسبة النجاح', 'Taux de réussite'],
+    date: ['التاريخ', 'Date'], cls: ['القسم', 'Classe'], content: ['المحتوى', 'Contenu'], homework: ['الواجب المنزلي', 'Travail à la maison'], notes: ['ملاحظات', 'Remarques'],
+    teacher: ['الأستاذ(ة)', 'Enseignant(e)'], school: ['المتوسطة', 'CEM'], wilaya: ['مديرية التربية لولاية', 'Direction de l’éducation de'], schoolYear: ['السنة الدراسية', 'Année scolaire'],
+    backup: ['نسخ احتياطي (JSON)', 'Sauvegarder (JSON)'], restore: ['استرجاع نسخة', 'Restaurer'], wipe: ['مسح كل البيانات', 'Tout effacer'],
+    privacy: ['لا حساب ولا خادم: تخزن البيانات في متصفحك (IndexedDB) ولا يرسل أي شيء عبر الإنترنت. احتفظ بنسخة احتياطية بانتظام.', 'Aucun compte, aucun serveur : les données restent dans le navigateur (IndexedDB), rien n’est envoyé. Sauvegardez régulièrement.'],
+    calendar: ['رزنامة السنة الدراسية (قيم افتراضية قابلة للتعديل)', 'Calendrier scolaire (valeurs par défaut modifiables)'],
+    start: ['بداية الدراسة', 'Rentrée'], end: ['نهاية الدراسة', 'Fin des cours'], holidays: ['العطل', 'Vacances'], from: ['من', 'Du'], to: ['إلى', 'Au'],
+    termEnds: ['نهاية الفصلين 1 و 2', 'Fin des trimestres 1 et 2'], weekly: ['ساعات أسبوعية', 'Heures / semaine'], week: ['الأسبوع', 'Semaine'],
+    makePlan: ['إنشاء التدرج', 'Générer la progression'], overflow: ['تنبيه: الساعات المقترحة تتجاوز الأسابيع المتاحة بـ', 'Attention : dépassement de'],
+    verify: ['تنبيه: هذا التقسيم إعادة بناء من تدرجات منشورة لموسم 2025-2026؛ قارنه دائما بالتدرج الذي يعتمده مفتشك.', 'Attention : découpage reconstitué à partir de progressions publiées (2025-2026) ; vérifiez avec votre inspecteur.'],
+    confirmDel: ['تأكيد الحذف؟', 'Confirmer la suppression ?'], restored: ['تم الاسترجاع', 'Restauré'], install: ['تثبيت التطبيق', 'Installer l’application'],
+    pasteCsv: ['ألصق هنا قائمة: اللقب;الاسم (سطر لكل تلميذ) أو اختر ملفا', 'Collez : Nom;Prénom (une ligne par élève) ou choisissez un fichier'],
+    newFiche: ['مذكرة جديدة', 'Nouvelle fiche'], myFiches: ['مذكراتي المحفوظة', 'Mes fiches'], myTests: ['مواضيعي المحفوظة', 'Mes sujets'],
+    sumWarn: ['مجموع النقاط لا يساوي 20', 'Le total n’est pas 20'], fromBank: ['من بنك التمارين', 'Depuis la banque'], fromGen: ['من المولد', 'Depuis le générateur'],
+    empty: ['لا شيء بعد', 'Rien pour l’instant'], title: ['العنوان', 'Titre'], up: ['↑', '↑'], down: ['↓', '↓']
+  };
+  let lang = 'ar';
+  const I18N = { T, get lang() { return lang; }, set(l) { lang = l === 'fr' ? 'fr' : 'ar'; document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; },
+    t: k => (T[k] ? T[k][lang === 'fr' ? 1 : 0] : k) };
+  root.I18N = I18N; root.t = I18N.t;
+})(this);
